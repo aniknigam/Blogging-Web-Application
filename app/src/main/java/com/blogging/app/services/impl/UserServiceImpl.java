@@ -1,8 +1,10 @@
 package com.blogging.app.services.impl;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.blogging.app.entities.User;
 import com.blogging.app.exceptions.ResourceNotFoundException;
@@ -10,6 +12,7 @@ import com.blogging.app.payloads.UserDTO;
 import com.blogging.app.repositories.UserRepo;
 import com.blogging.app.services.UserService;
 
+@Service
 public class UserServiceImpl implements UserService {
 	
     @Autowired
@@ -24,7 +27,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserDTO updateUser(UserDTO userdto, Integer userId) {
-		//he orElseThrow method is part of the Optional class in Java. The Optional class was introduced in Java 8 as a way to handle potentially null values without explicitly using null references.
+		//here orElseThrow method is part of the Optional class in Java. The Optional class was introduced in Java 8 as a way to handle potentially null values without explicitly using null references.
 		User user = this.userRepo.findById(userId)
 				.orElseThrow(()-> new ResourceNotFoundException("User", "id", userId));
 		
@@ -40,19 +43,24 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public UserDTO getUserById(Integer userId) {
-		// TODO Auto-generated method stub
-		return null;
+		User user = this.userRepo.findById(userId)
+				.orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+		return this.userTodto(user);
 	}
 
 	@Override
 	public List<UserDTO> getAllUsers() {
-		// TODO Auto-generated method stub
-		return null;
+		List<User> users = this.userRepo.findAll();
+		//in this line we are converting each data from user type to user dto type, we are doing it for n number of data that is why we are using stream, stream is a Api provides a powerful and expressive way to process collections of objects. Streams in Java are not data structures themselves but rather a mechanism for expressing computations on data.
+		List<UserDTO> userDtos = users.stream().map(user->this.userTodto(user)).collect(Collectors.toList());
+		return userDtos;
 	}
 
 	@Override
 	public void deleteUser(Integer userId) {
-		// TODO Auto-generated method stub
+	 User user =  this.userRepo.findById(userId)
+	         .orElseThrow(()-> new ResourceNotFoundException("User", "Id", userId));
+	  this.userRepo.delete(user);
 
 	}
 	
