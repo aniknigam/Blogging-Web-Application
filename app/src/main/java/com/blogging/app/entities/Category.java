@@ -12,34 +12,30 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table(name = "Users")
-@NoArgsConstructor
+@Table(name = "categories")
 @Getter
 @Setter
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
-    
-    @Column(name = "user_name", nullable = false, length = 100)   
-	private String name;
-    
-    @Column
-    @NotBlank(message = "email cannot be blank")
-	private String email;
-    
-    @Column
-	private String password;
-    
-    @Column
-	private String about;
-    
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+@NoArgsConstructor
+public class Category {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer categoryId;
+	
+	@Column(length = 100)
+	private String Title;
+	
+	@Column(name = "Description")
+	private String categoryDescription;
+	
+	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<Post> posts = new ArrayList<>();
+
 }
+
+	
