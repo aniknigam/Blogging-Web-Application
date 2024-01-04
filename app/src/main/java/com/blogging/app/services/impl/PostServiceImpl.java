@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.blogging.app.entities.Category;
@@ -77,9 +78,17 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public PostResponse getAllPost(Integer pageNumber, Integer pageSize) {
+	public PostResponse getAllPost(Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
+		Sort sort = null;
+		if(sortDir.equalsIgnoreCase("des")) {
+			sort = Sort.by(sortBy).descending();
+		}else {
+			sort = Sort.by(sortBy).ascending();
+		}
 		//Pageable is an interface in Spring Data that represents pagination information.
-		Pageable p = PageRequest.of(pageNumber, pageSize);		
+		Pageable p = PageRequest.of(pageNumber, pageSize, sort);
+		//we can directly do sorting if we only want to do it in ascending or descengding
+		//Pageable p = PageRequest.of(pageNumber,pageSize, Sort.by(sortBy).ascending());
 		
 		Page<Post> pagePost = this.postrepo.findAll(p);
 		
