@@ -109,25 +109,44 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public List<PostDTO> getPostsByCategory(Integer categoryId) {
+	public PostResponse getPostsByCategory(Integer categoryId, Integer pageNumber, Integer pageSize) {
 		Category ctg = this.categoryrepo.findById(categoryId)
 				.orElseThrow(() -> new ResourceNotFoundException("Category", "Category Id", categoryId));
+	    Pageable p = PageRequest.of(pageNumber, pageSize);
+	    Page<Post> pagePost = this.postrepo.findByCategory(ctg, p);
 		
-		List<Post> posts = this.postrepo.findByCategory(ctg);
-		List<PostDTO> postsdto = posts
+		List<PostDTO> postsdto = pagePost.getContent()
 				   .stream().map((post) -> this.modelmapper.map(post, PostDTO.class))
 				   .collect(Collectors.toList());
-		return postsdto;
+		PostResponse postresponse = new PostResponse();
+	    postresponse.setContent(postsdto);
+	    postresponse.setPageNumber(pagePost.getNumber());
+	    postresponse.setPageSize(pagePost.getSize());
+	    postresponse.setTotalElement(pagePost.getTotalElements());
+	    postresponse.setTotalPages(pagePost.getTotalPages());
+	    postresponse.setLastPage(pagePost.isLast());
+		return postresponse ;
 	}
 
 	@Override
-	public List<PostDTO> getPostsByUser(Integer userId) {
+	public PostResponse getPostsByUser(Integer userId, Integer pageNumber, Integer pageSize) {
 		User user = this.userrepo.findById(userId).
 				orElseThrow(() -> new ResourceNotFoundException("User", "User Id", userId));
+		 Pageable p = PageRequest.of(pageNumber, pageSize);
+		 Page<Post> pagePost = this.postrepo.findByUser(user, p);
 		
-		List<Post> posts = this.postrepo.findByUser(user);
-		List<PostDTO> postdto = posts.stream().map((e) -> this.modelmapper.map(e, PostDTO.class)).collect(Collectors.toList());
-		return postdto ;
+	
+		List<PostDTO> postdto = pagePost.getContent()
+				    .stream().map((e) -> this.modelmapper.map(e, PostDTO.class)).collect(Collectors.toList());
+		
+		PostResponse postresponse = new PostResponse();
+	    postresponse.setContent(postdto);
+	    postresponse.setPageNumber(pagePost.getNumber());
+	    postresponse.setPageSize(pagePost.getSize());
+	    postresponse.setTotalElement(pagePost.getTotalElements());
+	    postresponse.setTotalPages(pagePost.getTotalPages());
+	    postresponse.setLastPage(pagePost.isLast());
+		return postresponse ;
 	}
 
 	@Override
