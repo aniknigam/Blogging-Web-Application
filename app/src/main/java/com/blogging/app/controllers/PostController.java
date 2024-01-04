@@ -12,10 +12,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.blogging.app.payloads.ApiResponse;
 import com.blogging.app.payloads.PostDTO;
+import com.blogging.app.payloads.PostResponse;
 import com.blogging.app.services.PostService;
 
 import jakarta.validation.Valid;
@@ -54,9 +56,13 @@ public class PostController {
 	
 	//get all posts
 	@GetMapping("/allposts")
-	public ResponseEntity<List<PostDTO>> getAllPost(){
-		List<PostDTO> allposts = this.postservice.getAllPost();
-		return new ResponseEntity<List<PostDTO>>(allposts,HttpStatus.OK);
+	public ResponseEntity<PostResponse> getAllPost(
+			@RequestParam(value="pageNumber",defaultValue="0", required = false) Integer pageNumber,
+			@RequestParam(value="pageSize",defaultValue="5", required = false) Integer pageSize			
+			)
+	{
+		PostResponse allposts = this.postservice.getAllPost(pageNumber, pageSize);
+		return new ResponseEntity<PostResponse>(allposts,HttpStatus.OK);
 	}
 	
 	//get post by id
@@ -85,6 +91,8 @@ public class PostController {
 		
 		return new ResponseEntity<PostDTO>(updatePost, HttpStatus.OK);
 	}
-	
+
+
+
 	
 }
