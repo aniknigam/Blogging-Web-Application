@@ -2,7 +2,7 @@ package com.blogging.app.services;
 
 import java.util.List;
 
-import com.blogging.app.entities.Post;
+
 import com.blogging.app.payloads.PostDTO;
 import com.blogging.app.payloads.PostResponse;
 
@@ -24,11 +24,11 @@ public interface PostService {
 	PostDTO getSinglePost(Integer postId);
 
 	// get all post by category
-	PostResponse getPostsByCategory(Integer categoryId ,Integer pageNumber, Integer pageSize);
+	PostResponse getPostsByCategory(Integer categoryId ,Integer pageNumber, Integer pageSize, String sortBy, String sortDir);
 
 	// get all post by user
-	PostResponse getPostsByUser(Integer userId, Integer pageNumber, Integer pageSize);
+	PostResponse getPostsByUser(Integer userId, Integer pageNumber, Integer pageSize, String sortBy, String sortDir);
 
 	// search post
-	List<Post> searchPost(String keyword);
+	List<PostDTO> searchPost(String keyword);
 }

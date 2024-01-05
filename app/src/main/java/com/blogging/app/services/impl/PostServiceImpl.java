@@ -80,6 +80,7 @@ public class PostServiceImpl implements PostService {
 	@Override
 	public PostResponse getAllPost(Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
 		Sort sort = null;
+		//equalsIgnoreCase is a method in Java used for case-insensitive string comparison. 
 		if(sortDir.equalsIgnoreCase("des")) {
 			sort = Sort.by(sortBy).descending();
 		}else {
@@ -118,10 +119,19 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public PostResponse getPostsByCategory(Integer categoryId, Integer pageNumber, Integer pageSize) {
+	public PostResponse getPostsByCategory(Integer categoryId, Integer pageNumber, Integer pageSize, String sortBy, String sortDir) {
 		Category ctg = this.categoryrepo.findById(categoryId)
 				.orElseThrow(() -> new ResourceNotFoundException("Category", "Category Id", categoryId));
-	    Pageable p = PageRequest.of(pageNumber, pageSize);
+		
+		Sort sort = null;
+		//equalsIgnoreCase is a method in Java used for case-insensitive string comparison. 
+		if(sortDir.equalsIgnoreCase("des")) {
+			sort = Sort.by(sortBy).descending();
+		}else {
+			sort = Sort.by(sortBy).ascending();
+		}
+		
+	    Pageable p = PageRequest.of(pageNumber, pageSize, sort);
 	    Page<Post> pagePost = this.postrepo.findByCategory(ctg, p);
 		
 		List<PostDTO> postsdto = pagePost.getContent()
@@ -138,10 +148,17 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public PostResponse getPostsByUser(Integer userId, Integer pageNumber, Integer pageSize) {
+	public PostResponse getPostsByUser(Integer userId, Integer pageNumber, Integer pageSize,  String sortBy, String sortDir) {
 		User user = this.userrepo.findById(userId).
 				orElseThrow(() -> new ResourceNotFoundException("User", "User Id", userId));
-		 Pageable p = PageRequest.of(pageNumber, pageSize);
+		Sort sort = null;
+		//equalsIgnoreCase is a method in Java used for case-insensitive string comparison. 
+		if(sortDir.equalsIgnoreCase("des")) {
+			sort = Sort.by(sortBy).descending();
+		}else {
+			sort = Sort.by(sortBy).ascending();
+		}
+		 Pageable p = PageRequest.of(pageNumber, pageSize, sort);
 		 Page<Post> pagePost = this.postrepo.findByUser(user, p);
 		
 	
@@ -159,9 +176,12 @@ public class PostServiceImpl implements PostService {
 	}
 
 	@Override
-	public List<Post> searchPost(String keyword) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<PostDTO> searchPost(String keyword) {
+		List<Post> posts = this.postrepo.findByTitleContaining(keyword);
+		List<PostDTO> postsdto = posts
+				.stream().map((post) -> this.modelmapper.map(post, PostDTO.class))
+				.collect(Collectors.toList());
+		return postsdto ;
 	}
 
 }

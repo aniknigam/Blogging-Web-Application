@@ -10,10 +10,13 @@ import com.blogging.app.entities.Category;
 import com.blogging.app.entities.Post;
 import com.blogging.app.entities.User;
 
+
 public interface PostRepo extends JpaRepository<Post, Integer> {
 	List<Post> findByUser(User user);
 	Page<Post> findByUser(User user, Pageable pageable);
 
 	List<Post> findByCategory(Category category);
 	Page<Post> findByCategory(Category user, Pageable pageable);
+	
+	List<Post> findByTitleContaining(String title);
 }
