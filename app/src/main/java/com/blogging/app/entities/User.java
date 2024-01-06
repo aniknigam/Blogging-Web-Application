@@ -40,6 +40,9 @@ public class User {
     @Column
 	private String about;
     
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private List<Post> posts = new ArrayList<>();
+    //CascadeType.ALL ensures that any changes to the Category will be cascaded to associated posts.
+   // FetchType.LAZY indicates that posts are loaded lazily, only essential information will be loaded, if it is set to eager all the information will be loaded.
+
 }

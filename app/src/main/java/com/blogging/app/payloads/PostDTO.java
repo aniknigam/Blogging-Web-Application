@@ -1,6 +1,10 @@
 package com.blogging.app.payloads;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
+import com.blogging.app.entities.Comment;
 
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
@@ -31,4 +35,7 @@ public class PostDTO {
 	
 	
 	private UserDTO user;
+	
+	
+	private Set<CommentDTO> comments = new HashSet<>();
 }
