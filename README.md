@@ -40,4 +40,4 @@ This is the backend component of a modern blogging web application built using S
 
 ## Clone the repository:
 
-Command -> git clone https://github.com/mhamp/bloggingapp.git
+Command -> git clone [https://github.com/mhamp/bloggingapp.git](https://github.com/aniknigam/Blogging-Web-Application.git)https://github.com/aniknigam/Blogging-Web-Application.git
