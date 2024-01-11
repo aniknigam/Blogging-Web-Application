@@ -27,5 +27,8 @@ public class UserDTO {
 		
 		@NotEmpty
 		private String about;
+		
+		@NotEmpty
+		private String roles;
 }
 

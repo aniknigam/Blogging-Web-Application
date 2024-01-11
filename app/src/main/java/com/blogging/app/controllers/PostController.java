@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,6 +50,7 @@ public class PostController {
 	private String path;
 
 	@PostMapping("/user/{userId}/category/{categoryId}")
+	@PreAuthorize("hasAuthority('USER_ROLES')")
 	public ResponseEntity<PostDTO> createPost(@Valid @RequestBody PostDTO postdto, @PathVariable Integer userId,
 			@PathVariable Integer categoryId) {
 		PostDTO createpost = this.postservice.createPost(postdto, userId, categoryId);
@@ -57,6 +59,7 @@ public class PostController {
 
 	// get all post of a particular user
 	@GetMapping("/user/posts/{userId}")
+	@PreAuthorize("hasAuthority('USER_ROLES') or hasAuthority('ADMIN_ROLES')")
 	public ResponseEntity<PostResponse> getPostsByUser(@PathVariable Integer userId,
 			@RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
 			@RequestParam(value = "pageSize", defaultValue = "5", required = false) Integer pageSize,
@@ -68,6 +71,7 @@ public class PostController {
 
 	// get all post of a particular category
 	@GetMapping("/category/posts/{categoryId}")
+	@PreAuthorize("hasAuthority('USER_ROLES') or hasAuthority('ADMIN_ROLES')")
 	public ResponseEntity<PostResponse> getPostsByCategory(@PathVariable Integer categoryId,
 			@RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
 			@RequestParam(value = "pageSize", defaultValue = "5", required = false) Integer pageSize,
@@ -79,6 +83,7 @@ public class PostController {
 
 	// get all posts
 	@GetMapping("/allposts")
+	@PreAuthorize("hasAuthority('USER_ROLES') or hasAuthority('ADMIN_ROLES')")
 	public ResponseEntity<PostResponse> getAllPost(
 			@RequestParam(value = "pageNumber", defaultValue = "0", required = false) Integer pageNumber,
 			@RequestParam(value = "pageSize", defaultValue = "5", required = false) Integer pageSize,
@@ -90,6 +95,7 @@ public class PostController {
 
 	// get post by id
 	@GetMapping("/getpost/{postId}")
+	@PreAuthorize("hasAuthority('USER_ROLES') or hasAuthority('ADMIN_ROLES')")
 	public ResponseEntity<PostDTO> getPostById(@PathVariable Integer postId) {
 		PostDTO postdto = this.postservice.getSinglePost(postId);
 		return new ResponseEntity<PostDTO>(postdto, HttpStatus.OK);
@@ -97,6 +103,7 @@ public class PostController {
 
 	// delete a post
 	@DeleteMapping("/delete/{postId}")
+	@PreAuthorize("hasAuthority('USER_ROLES')")
 	public ApiResponse deletepost(@PathVariable Integer postId) {
 		this.postservice.deletePost(postId);
 		return new ApiResponse("Post is deleted Successfully !!", true, "You can create a new post");
@@ -105,6 +112,7 @@ public class PostController {
 	// update a post
 
 	@PutMapping("/update/{postId}")
+	@PreAuthorize("hasAuthority('USER_ROLES')")
 	public ResponseEntity<PostDTO> updatePost(@RequestBody PostDTO postdto, @PathVariable Integer postId) {
 		PostDTO updatePost = this.postservice.updatePost(postdto, postId);
 
@@ -113,6 +121,7 @@ public class PostController {
 
 	// search a post
 	@GetMapping("/search/{keywords}")
+	@PreAuthorize("hasAuthority('USER_ROLES') or hasAuthority('ADMIN_ROLES')")
 	public ResponseEntity<List<PostDTO>> searchPost(@PathVariable("keywords") String keywords) {
 		List<PostDTO> results = this.postservice.searchPost(keywords);
 		return new ResponseEntity<List<PostDTO>>(results, HttpStatus.OK);
@@ -121,6 +130,7 @@ public class PostController {
 	
 	//post image
 	@PostMapping("/image/upload/{postId}")
+	@PreAuthorize("hasAuthority('USER_ROLES')")
 	public ResponseEntity<PostDTO> uploadPostImage(
 			@RequestParam("image") MultipartFile image,
 			@PathVariable("postId") Integer postId
@@ -136,6 +146,7 @@ public class PostController {
    //method to serve file
 	//it will produce a response with content type set to JPEG image. 
 	@GetMapping(value="/getImage/{imageName}", produces = MediaType.IMAGE_JPEG_VALUE)
+	@PreAuthorize("hasAuthority('USER_ROLES') or hasAuthority('ADMIN_ROLES')")
 	public void downloadImage(
 			@PathVariable("imageName") String imageName,
 			HttpServletResponse response // it means that it will return the response to the browser in the form of image

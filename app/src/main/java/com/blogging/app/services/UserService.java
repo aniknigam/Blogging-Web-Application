@@ -2,6 +2,8 @@ package com.blogging.app.services;
 
 import java.util.List;
 
+import org.springframework.security.core.userdetails.UserDetails;
+
 import com.blogging.app.payloads.UserDTO;
 
 public interface UserService {
@@ -15,4 +17,7 @@ public interface UserService {
 	List<UserDTO> getAllUsers();
 	
 	void deleteUser(Integer userId);
+
+	
+	
 }

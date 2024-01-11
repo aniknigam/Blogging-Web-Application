@@ -18,7 +18,7 @@ public class GlobarExceptionHandler {
 	@ExceptionHandler(ResourceNotFoundException.class)
 	public ResponseEntity<ApiResponse> resourceNotFoundExceptionHandler(ResourceNotFoundException ex) {
 		String message = ex.getMessage();
-		ApiResponse apiresponse = new ApiResponse(message, false, "Try with valid User Id");
+		ApiResponse apiresponse = new ApiResponse(message, false, "Try with valid  Id");
 		return new ResponseEntity<ApiResponse>(apiresponse, HttpStatus.NOT_FOUND);
 	}
 

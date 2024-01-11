@@ -3,6 +3,7 @@ package com.blogging.app.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,15 +23,17 @@ public class CommentController {
 	private CommentService commentservice;
 	
 	@PostMapping("/addcomment/topost/{postId}")
+	@PreAuthorize("hasAuthority('USER_ROLES') or hasAuthority('ADMIN_ROLES')")
 	public ResponseEntity<CommentDTO> createComment(@RequestBody CommentDTO commentdto, @PathVariable("postId") Integer postID){
 		CommentDTO comment = this.commentservice.createComment(commentdto, postID);
 		return new ResponseEntity<CommentDTO>(comment, HttpStatus.CREATED);
 	}
 	
 	@DeleteMapping("/deletcomment/{commentId}")
+	@PreAuthorize("hasAuthority('USER_ROLES') or hasAuthority('ADMIN_ROLES')")
 	public ResponseEntity<ApiResponse> deleteComment(@PathVariable Integer commentId){
 			this.commentservice.deleteComment(commentId);
-			return new ResponseEntity<ApiResponse>(new ApiResponse("Message Deleted Successfully", true, "Enjoy Reading"), HttpStatus.OK);		
+			return new ResponseEntity<ApiResponse>(new ApiResponse("Comment Deleted Successfully", true, "Enjoy Reading"), HttpStatus.OK);		
 					
 		
 	}
