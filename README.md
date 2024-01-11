@@ -1,5 +1,5 @@
 
-# Blogging Web Application - Backend
+# Blogging Web Application - Backend (Spring Boot)
 
 This is the backend component of a modern blogging web application built using Spring Boot. The application supports CRUD operations for entities like User, Post, Post Category, and Comment. It includes features such as user authentication using JWT tokens, password encoding, one-to-many and many-to-one relationships, exception handling, and integration with a MySQL database. The project also utilizes the ModelMapper library for entity mapping.
 
