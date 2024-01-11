@@ -35,7 +35,7 @@ This is the backend component of a modern blogging web application built using S
 - MySQL 
 ## Database Structure 
 
-![App Screenshot](https://drive.google.com/file/d/1D92q0B3A_BdEjKFCxoH4a82ch6XqSzSx/view?usp=drive_link)
+![blogApp](https://github.com/aniknigam/Blogging-Web-Application/assets/108569163/82a311ca-96f8-434a-a4df-828e47572e48)
 
 
 ## Clone the repository:
